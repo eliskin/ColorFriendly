@@ -1,0 +1,246 @@
+diff --git a/extensions/browser/api/widget/widget_api.cc b/extensions/browser/api/widget/widget_api.cc
+index e69de29..09faa57 100644
+--- a/extensions/browser/api/widget/widget_api.cc
++++ b/extensions/browser/api/widget/widget_api.cc
+@@ -0,0 +1,48 @@
++// Copyright 2014 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#include "extensions/browser/api/widget/widget_api.h"
++
++#include "base/sys_info.h"
++#include "chrome/browser/ui/browser.h"
++#include "chrome/browser/ui/browser_list.h"
++#include "chrome/browser/ui/tabs/tab_strip_model.h"
++
++
++namespace extensions {
++
++WidgetGetWindowsFunction::WidgetGetWindowsFunction() {}
++
++WidgetGetWindowsFunction::~WidgetGetWindowsFunction() {}
++
++AsyncExtensionFunction::ResponseAction WidgetGetWindowsFunction::Run() {
++    
++    base::ListValue* browserIDList = new base::ListValue();
++    
++    return RespondNow(OneArgument(browserIDList));
++}
++
++
++WidgetGetTabsForWindowFunction::WidgetGetTabsForWindowFunction() {}
++
++WidgetGetTabsForWindowFunction::~WidgetGetTabsForWindowFunction() {}
++
++AsyncExtensionFunction::ResponseAction WidgetGetTabsForWindowFunction::Run() {
++    
++    base::ListValue* allTabs = new base::ListValue();
++
++    return RespondNow(OneArgument(allTabs));
++}
++    
++WidgetGetElementsFunction::WidgetGetElementsFunction() {}
++
++WidgetGetElementsFunction::~WidgetGetElementsFunction() {}
++
++AsyncExtensionFunction::ResponseAction WidgetGetElementsFunction::Run() {
++    
++    base::ListValue* test = new base::ListValue();
++    return RespondNow(OneArgument(test));
++}
++
++}  // namespace extensions
+diff --git a/extensions/browser/api/widget/widget_api.h b/extensions/browser/api/widget/widget_api.h
+index e69de29..dacc3df 100644
+--- a/extensions/browser/api/widget/widget_api.h
++++ b/extensions/browser/api/widget/widget_api.h
+@@ -0,0 +1,46 @@
++// Copyright 2014 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef EXTENSIONS_BROWSER_API_WIDGET_WIDGET_API_H_
++#define EXTENSIONS_BROWSER_API_WIDGET_WIDGET_API_H_
++
++#include "chrome/browser/extensions/chrome_extension_function.h"
++#include "extensions/browser/extension_function.h"
++#include "extensions/common/api/widget.h"
++
++namespace extensions {
++
++class WidgetGetWindowsFunction : public ChromeUIThreadExtensionFunction {
++ public:
++  DECLARE_EXTENSION_FUNCTION("widget.getWindows", WIDGET_GETWINDOWS)
++  WidgetGetWindowsFunction();
++
++ private:
++  ~WidgetGetWindowsFunction() override;
++  AsyncExtensionFunction::ResponseAction Run() override;
++};
++
++class WidgetGetTabsForWindowFunction : public ChromeUIThreadExtensionFunction {
++ public:
++  DECLARE_EXTENSION_FUNCTION("widget.getTabsForWindow", WIDGET_GETTABSFORWINDOW)
++  WidgetGetTabsForWindowFunction();
++
++ private:
++  ~WidgetGetTabsForWindowFunction() override;
++  AsyncExtensionFunction::ResponseAction Run() override;
++};
++    
++class WidgetGetElementsFunction : public ChromeUIThreadExtensionFunction {
++public:
++    DECLARE_EXTENSION_FUNCTION("widget.getElementsFunction", WIDGET_GETELEMENTS)
++    WidgetGetElementsFunction();
++    
++private:
++    ~WidgetGetElementsFunction() override;
++    AsyncExtensionFunction::ResponseAction Run() override;
++};
++
++}  // namespace extensions
++
++#endif  // EXTENSIONS_BROWSER_API_WIDGET_WIDGET_API_H_
+diff --git a/extensions/browser/extension_function_histogram_value.h b/extensions/browser/extension_function_histogram_value.h
+index afaec45..bc182f1 100644
+--- a/extensions/browser/extension_function_histogram_value.h
++++ b/extensions/browser/extension_function_histogram_value.h
+@@ -1152,6 +1152,9 @@ enum HistogramValue {
+   DATAREDUCTIONPROXY_GETDATAUSAGE,
+   EASYUNLOCKPRIVATE_SETUPCONNECTIONGETDEVICEADDRESS,
+   TABCAPTURE_CAPTUREOFFSCREENTAB,
++  WIDGET_GETWINDOWS,
++  WIDGET_GETTABSFORWINDOW,
++  WIDGET_GETELEMENTS,
+   // Last entry: Add new entries above, then run:
+   // python tools/metrics/histograms/update_extension_histograms.py
+   ENUM_BOUNDARY
+diff --git a/extensions/common/api/_api_features.json b/extensions/common/api/_api_features.json
+index bba4b4f..c021872 100644
+--- a/extensions/common/api/_api_features.json
++++ b/extensions/common/api/_api_features.json
+@@ -449,5 +449,9 @@
+       "chrome://media-router/*",
+       "chrome://oobe/*"
+     ]
+-  }]
++  }],
++  "widget": {
++    "dependencies": ["permission:widget"],
++    "contexts": ["blessed_extension"]
++  }
+ }
+diff --git a/extensions/common/api/_permission_features.json b/extensions/common/api/_permission_features.json
+index 44a2ae0..70b800f 100644
+--- a/extensions/common/api/_permission_features.json
++++ b/extensions/common/api/_permission_features.json
+@@ -483,5 +483,9 @@
+   "webRequestBlocking": {
+     "channel": "stable",
+     "extension_types": ["extension", "legacy_packaged_app"]
++  },
++  "widget": {
++    "channel": "dev",
++    "extension_types": ["extension", "platform_app"]
+   }
+ }
+diff --git a/extensions/common/api/schemas.gypi b/extensions/common/api/schemas.gypi
+index 0361233..9a7ea4e 100644
+--- a/extensions/common/api/schemas.gypi
++++ b/extensions/common/api/schemas.gypi
+@@ -53,7 +53,8 @@
+       'usb.idl',
+       'virtual_keyboard_private.json',
+       'web_request.json',
+-      'web_view_internal.json'
++      'web_view_internal.json',
++      'widget.idl',
+     ],
+     # ChromeOS-specific schemas.
+     'chromeos_schema_files': [
+diff --git a/extensions/common/api/widget.idl b/extensions/common/api/widget.idl
+index e69de29..ffd564d 100644
+--- a/extensions/common/api/widget.idl
++++ b/extensions/common/api/widget.idl
+@@ -0,0 +1,31 @@
++// Copyright 2014 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// Use the <code>chrome.widget</code> API to query whatever.
++namespace widget {
++
++  dictionary Window {
++    long id;
++  };
++
++  dictionary Tab {
++    DOMString title;
++    DOMString url;
++    boolean isSelected;
++  };
++
++  dictionary Element {
++    long test;
++  };
++
++  callback WindowCallback = void (Window[] windows);
++  callback TabsForWindowCallback = void (Tab[] tabs);
++  callback ElementCallback = void (Element[] elements);
++
++  interface Functions {
++    static void getWindows(WindowCallback callback);
++    static void getTabsForWindow(Window window, TabsForWindowCallback callback);
++    static void getElements(ElementCallback callback);
++  };
++};
+diff --git a/extensions/common/permissions/api_permission.h b/extensions/common/permissions/api_permission.h
+index 2a0fbc2..725e9da 100644
+--- a/extensions/common/permissions/api_permission.h
++++ b/extensions/common/permissions/api_permission.h
+@@ -243,6 +243,7 @@ class APIPermission {
+     kEnterpriseDeviceAttributes,
+     kCertificateProvider,
+     kResourcesPrivate,
++    kWidget,
+     // Last entry: Add new entries above and ensure to update the
+     // "ExtensionPermission3" enum in tools/metrics/histograms/histograms.xml
+     // (by running update_extension_permission.py).
+diff --git a/extensions/common/permissions/extensions_api_permissions.cc b/extensions/common/permissions/extensions_api_permissions.cc
+index c9eb11b..53d005a 100644
+--- a/extensions/common/permissions/extensions_api_permissions.cc
++++ b/extensions/common/permissions/extensions_api_permissions.cc
+@@ -110,6 +110,7 @@ std::vector<APIPermissionInfo*> ExtensionsAPIPermissions::GetAllPermissions()
+       {APIPermission::kWebView,
+        "webview",
+        APIPermissionInfo::kFlagCannotBeOptional},
++      {APIPermission::kWidget, "widget"},
+       {APIPermission::kWindowShape, "app.window.shape"},
+   };
+ 
+diff --git a/extensions/extensions.gypi b/extensions/extensions.gypi
+index 450a943..83017cf 100644
+--- a/extensions/extensions.gypi
++++ b/extensions/extensions.gypi
+@@ -493,6 +493,8 @@
+       'browser/api/web_request/web_request_permissions.h',
+       'browser/api/web_request/web_request_time_tracker.cc',
+       'browser/api/web_request/web_request_time_tracker.h',
++      'browser/api/widget/widget_api.cc',
++      'browser/api/widget/widget_api.h',
+       'browser/api_activity_monitor.h',
+       'browser/app_sorting.h',
+       'browser/app_window/app_delegate.h',
+diff --git a/tools/metrics/histograms/histograms.xml b/tools/metrics/histograms/histograms.xml
+index b8f7de1..a283b7e 100644
+--- a/tools/metrics/histograms/histograms.xml
++++ b/tools/metrics/histograms/histograms.xml
+@@ -59006,6 +59006,7 @@ http://cs/file:chrome/histograms.xml - but prefer this file for new entries.
+   <int value="196" label="kEnterpriseDeviceAttributes"/>
+   <int value="197" label="kCertificateProvider"/>
+   <int value="198" label="kResourcesPrivate"/>
++  <int value="199" label="kWidget"/>
+ </enum>
+ 
+ <enum name="ExtensionServiceVerifyAllSuccess" type="int">
