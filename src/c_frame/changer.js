@@ -1,14 +1,18 @@
 
+//Color Type Constants
+var blue = "blue";
+var red  = "red";
+
 //Initialize port connection with popup script
 var port = chrome.runtime.connect({name: "color_port"});
+console.log("Hello World!"); //Inspect the page's console to view
 
 //Receive and service color change requests
 port.onMessage.addListener(function(msg) {
-	
-	//Print message to the console
-	console.log("message received: \"" + msg.text + "\"");
-	//Get blind type from port message
-	var btype = msg.text; 
+	//Get 'blind type' from port message
+	var btype = msg.text;
+	//Confirm Message
+	console.log("message received: \"" + btype + "\"");
 	
 	/**
 	*This will call other functions 
@@ -17,12 +21,12 @@ port.onMessage.addListener(function(msg) {
 	function setColors()
 	{
 		//This is a test to show how to compare the btype and change an element
-		if(btype == "red")
+		if(btype == red)
 		{
 			chrome.tabs.executeScript(null,
 				{code:"document.body.style.backgroundColor='red'"});//we change the color of background element
 		}
-		else if(btype == "blue")
+		else if(btype == blue)
 		{
 			chrome.tabs.executeScript(null,
 				{code:"document.body.style.backgroundColor='blue'"});//we change the color of background element
@@ -40,11 +44,11 @@ port.onMessage.addListener(function(msg) {
 		*to a certain value.
 		*/
 		var contrast;
-		if(btype == "red")
+		if(btype == red)
 		{
 			contrast = 1;
 		}
-		else if(btype == "blue")
+		else if(btype == blue)
 		{
 			contrast = 2;
 		}
