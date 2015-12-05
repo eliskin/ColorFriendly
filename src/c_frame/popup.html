@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Set Page Color Popup</title>
+    <title>ColorFriendly Popup</title>
     <style>
         body {
           overflow:hidden;
@@ -9,7 +9,7 @@
           padding:0px 20px 15px 20px;
           background:white;
         }
-        div.red, div.blue {
+        div.button {
           cursor:pointer;
           text-align:center;
           padding:1px 3px;
@@ -26,20 +26,22 @@
         div.smallBreak {
             height:5px;
         }
-        div.red:hover, div.blue:hover {
+        div.button:hover {
           background:#aaaaaa;
         }
     </style>
-    <script src="popup.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
   </head>
   <body>
       <h2 align="center">ColorFriendly</h2>
       <div align="center">Please select an option below to make webpages easier to read.</div>
       <br>
     <span id="s" align="center">
-        <div class="red">Red-Blue Adjustment</div>
+        <div class="button">Red-Blue Adjustment</div>
         <div class="smallBreak"></div>
-        <div class="blue">Blue-Green Adjustment</div>
+        <div class="button">Blue-Green Adjustment</div>
+        <br>
     </span>
+    <input type="checkbox" id="FadeToggler" name="FadeEnabled" value="FadeEnabled" checked>Fade Enabled
   </body>
 </html>
