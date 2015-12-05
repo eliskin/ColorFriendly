@@ -4,7 +4,10 @@
   "description": "Change the color of page elements",
   "version": "1.0",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*"
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "storage"
   ],
   "browser_action": {
       "default_title": "Set this page's color.",
