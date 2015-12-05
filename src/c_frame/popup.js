@@ -4,6 +4,7 @@ var kFadeOnOff = "kFadeOnOff";
 //Get bg_page object
 var bgpage = chrome.extension.getBackgroundPage();
 
+// Persist user selection of whether the fade animation should be shown
 function checkboxDidChange(e) {
     // the value of checkbox.checked is the value of the new state
     // of the checkbox (so if the user is unchecking the box,
@@ -15,6 +16,7 @@ function checkboxDidChange(e) {
                             });
 }
 
+// Persist user color blindness type of red-blue
 function redBlueButtonSelected(e) {
     chrome.storage.sync.set({kBTypeKey: "redBlue"}, function(result) {
                             if (chrome.runtime.lastError)
@@ -22,6 +24,7 @@ function redBlueButtonSelected(e) {
                             });
 }
 
+// Persist user color blindness type of blue-green
 function blueGreenButtonSelected(e) {
     chrome.storage.sync.set({kBTypeKey: "blueGreen"}, function(result) {
                             if (chrome.runtime.lastError)
