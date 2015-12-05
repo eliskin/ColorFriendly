@@ -1,7 +1,7 @@
 
 //Color Type Constants
-var blue = "blue";
-var red  = "red";
+var blue = "blueGreenButton";
+var red  = "redBlueButton";
 
 //Initialize port connection with popup script
 var port = chrome.runtime.connect({name: "color_port"});
