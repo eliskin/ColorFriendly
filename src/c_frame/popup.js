@@ -1,5 +1,9 @@
 var kBTypeKey = "kBTypeKey";
 var kFadeOnOff = "kFadeOnOff";
+var kDefaultButtonBGColor = "#cccccc";
+var kSelectedButtonBGColor = "#aaaaaa";
+var kRedBlue = "redBlue";
+var kBlueGreen = "blueGreen";
 
 //Get bg_page object
 var bgpage = chrome.extension.getBackgroundPage();
@@ -18,7 +22,10 @@ function checkboxDidChange(e) {
 
 // Persist user color blindness type of red-blue
 function redBlueButtonSelected(e) {
-    chrome.storage.sync.set({kBTypeKey: "redBlue"}, function(result) {
+    redBlueButton.style.background = kSelectedButtonBGColor;
+    blueGreenButton.style.background = kDefaultButtonBGColor;
+
+    chrome.storage.sync.set({kBTypeKey: kRedBlue}, function(result) {
         if (chrome.runtime.lastError)
             console.warn(chrome.runtime.lastError.message);
     });
@@ -26,7 +33,10 @@ function redBlueButtonSelected(e) {
 
 // Persist user color blindness type of blue-green
 function blueGreenButtonSelected(e) {
-    chrome.storage.sync.set({kBTypeKey: "blueGreen"}, function(result) {
+    redBlueButton.style.background = kDefaultButtonBGColor;
+    blueGreenButton.style.background = kSelectedButtonBGColor;
+
+    chrome.storage.sync.set({kBTypeKey: kBlueGreen}, function(result) {
         if (chrome.runtime.lastError)
             console.warn(chrome.runtime.lastError.message);
     });
@@ -41,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.sync.get(kFadeOnOff, function(result) {
         if (chrome.runtime.lastError)
             console.warn(chrome.runtime.lastError.message);
-            // the first time this runs, undefined is returned,
-            // and we don't need another if for that case because
-            // the default value of the checkbox will just be true
+        // the first time this runs, undefined is returned,
+        // and we don't need another if for that case because
+        // the default value of the checkbox will just be true
         else if (typeof result.kFadeOnOff !== "undefined")
             checkbox.checked = result.kFadeOnOff;
     });
@@ -53,6 +63,21 @@ document.addEventListener('DOMContentLoaded', function () {
     var blueGreenButton = document.getElementById("blueGreenButton");
     redBlueButton.addEventListener('click', redBlueButtonSelected);
     blueGreenButton.addEventListener('click', blueGreenButtonSelected);
+
+    chrome.storage.sync.get(kBTypeKey, function(result) {
+        if (chrome.runtime.lastError)
+            console.warn(chrome.runtime.lastError.message);
+        // the first time this runs, undefined is returned,
+        // and we don't need another if for that case because
+        // the default background color will be kDefaultButtonBGColor
+        else if (typeof result.kBTypeKey !== "undefined")
+        {
+            if (result.kBTypeKey == kRedBlue)
+                redBlueButton.style.background = kSelectedButtonBGColor;
+            else
+                blueGreenButton.style.background = kSelectedButtonBGColor;
+        }
+    });
 });
 
 //Forward color choice to bg_page.js
