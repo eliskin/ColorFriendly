@@ -15,6 +15,20 @@ function checkboxDidChange(e) {
                             });
 }
 
+function redBlueButtonSelected(e) {
+    chrome.storage.sync.set({kBTypeKey: "redBlue"}, function(result) {
+                            if (chrome.runtime.lastError)
+                            console.warn(chrome.runtime.lastError.message);
+                            });
+}
+
+function blueGreenButtonSelected(e) {
+    chrome.storage.sync.set({kBTypeKey: "blueGreen"}, function(result) {
+                            if (chrome.runtime.lastError)
+                            console.warn(chrome.runtime.lastError.message);
+                            });
+}
+
 //Add listener for color selections
 document.addEventListener('DOMContentLoaded', function () {
                           var span = document.getElementById("s");
@@ -24,10 +38,18 @@ document.addEventListener('DOMContentLoaded', function () {
                           chrome.storage.sync.get(kFadeOnOff, function(result) {
                                                   if (chrome.runtime.lastError)
                                                     console.warn(chrome.runtime.lastError.message);
+                                                  // the first time this runs, undefined is returned,
+                                                  // and we don't need another if for that case because
+                                                  // the default value of the checkbox will just be true
                                                   else if (typeof result.kFadeOnOff !== "undefined")
                                                     checkbox.checked = result.kFadeOnOff;
                                                   });
                           checkbox.addEventListener('change', checkboxDidChange);
+
+                          var redBlueButton = document.getElementById("redBlueButton");
+                          var blueGreenButton = document.getElementById("blueGreenButton");
+                          redBlueButton.addEventListener('click', redBlueButtonSelected);
+                          blueGreenButton.addEventListener('click', blueGreenButtonSelected);
 });
 
 //Forward color choice to bg_page.js
