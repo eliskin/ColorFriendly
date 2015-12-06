@@ -2,33 +2,43 @@
 //Color Type Constants
 var blue = "blue";
 var red  = "red";
-
+//RED AND BLUE HUE/COLOR MODIFIERS
+var contrastR = 1;// red green colorblind value
+var contrastB = 1;//blue green colorblind value
+var btype = "UNDEF";
 //Initialize port connection with popup script
 var port = chrome.runtime.connect({name: "color_port"});
 console.log("Hello World!"); //Inspect the page's console to view
 //Receive and service color change requests
 port.onMessage.addListener(function(msg) {
-	//Get 'blind type' from port message
-	var btype = msg.text;
-	//Confirm Message
-	console.log("message received: \"" + btype + "\"");
-	setColors();
+
+	//lets check and see are we getting the color type or an array of objects
+	if(msg.text == red || msg.text == blue)
+	{
+		btype = msg.text;
+		console.log("message received: \"" + btype + "\"");
+
+		port.postMessage({text: "give"});
+	}
+	else
+	{
+		setColors();
+	}
+
 	/**
 	*This will call other functions 
-	*such as retrieve elements. 
+	*
 	*/
 	function setColors()
 	{
 		//This is a test to show how to compare the btype and change an element
 		if(btype == red)
 		{
-			console.log("Sending red...")
-			port.postMessage({text: red});
+			console.log("Setting for red...")
 		}
 		else if(btype == blue)
 		{
-			console.log("Sending bliue...")
-			port.postMessage({text: blue})
+			console.log("Setting for blue...")
 		}
 	}
 	/**
@@ -54,14 +64,6 @@ port.onMessage.addListener(function(msg) {
 			contrast = 2;
 		}
 
-
-	}
-	/**
-	*This will get the elements of the page, and then call
-	*changeValues() on each element. Will require traversing the dom tree
-	*/
-	function retrieveElements()
-	{
 
 	}
 	
