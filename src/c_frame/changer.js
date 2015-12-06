@@ -6,14 +6,13 @@ var red  = "red";
 //Initialize port connection with popup script
 var port = chrome.runtime.connect({name: "color_port"});
 console.log("Hello World!"); //Inspect the page's console to view
-
 //Receive and service color change requests
 port.onMessage.addListener(function(msg) {
 	//Get 'blind type' from port message
 	var btype = msg.text;
 	//Confirm Message
 	console.log("message received: \"" + btype + "\"");
-	
+	setColors();
 	/**
 	*This will call other functions 
 	*such as retrieve elements. 
@@ -23,13 +22,13 @@ port.onMessage.addListener(function(msg) {
 		//This is a test to show how to compare the btype and change an element
 		if(btype == red)
 		{
-			chrome.tabs.executeScript(null,
-				{code:"document.body.style.backgroundColor='red'"});//we change the color of background element
+			console.log("Sending red...")
+			port.postMessage({text: red});
 		}
 		else if(btype == blue)
 		{
-			chrome.tabs.executeScript(null,
-				{code:"document.body.style.backgroundColor='blue'"});//we change the color of background element
+			console.log("Sending bliue...")
+			port.postMessage({text: blue})
 		}
 	}
 	/**
@@ -43,6 +42,8 @@ port.onMessage.addListener(function(msg) {
 		*values. Depending on what btype is we will set the contrast
 		*to a certain value.
 		*/
+
+		//set contrast
 		var contrast;
 		if(btype == red)
 		{
@@ -52,6 +53,8 @@ port.onMessage.addListener(function(msg) {
 		{
 			contrast = 2;
 		}
+
+
 	}
 	/**
 	*This will get the elements of the page, and then call
