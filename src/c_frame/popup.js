@@ -9,7 +9,6 @@ var kAdjustmentOnOff = "kAdjustmentOnOff";
 var kDefaultButtonBGColor = "#cccccc";
 var kSelectedButtonBGColor = "#aaaaaa";
 	
-	
 //Add listener for color selections
 document.addEventListener('DOMContentLoaded', function () {
     var span = document.getElementById("s")
