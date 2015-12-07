@@ -66,22 +66,17 @@ port.onMessage.addListener(function(msg) {
 			if(subElements[i].style)
 			{
 				console.log("Working...");
-				currentColor = getComputedStyle(subElements[i], null);//get the current color
-				
-				console.log(currentColor.backgroundColor);
-				tinyCurrentColor = tinycolor(currentColor);
+				currentColor = getComputedStyle(subElements[i], null);//get the current color	
+			//	console.log(currentColor.backgroundColor);
+				tinyCurrentColor = tinycolor(currentColor.backgroundColor);
+			//	console.log(tinyCurrentColor.toRgbString());
 				subElements[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
 			}
 			// change text colors		
 			if(subElements[i].style)
 			{
-				currentColor = subElements[i].style.color;
-				// if(currentColor)
-				// {
-				// 	console.log("SOMETHING HERE");
-				// }
-				// console.log(currentColor);
-				tinyCurrentColor = tinycolor(currentColor);
+				currentColor =  getComputedStyle(subElements[i], null);
+				tinyCurrentColor = tinycolor(currentColor.color);
 				subElements[i].style.color = changeContrast(tinyCurrentColor);
 			}
 		}			
@@ -140,12 +135,11 @@ port.onMessage.addListener(function(msg) {
 		// {
 
 		// }
-
-        theTinyColor.toRgb();
-      //  console.log(theTinyColor.toRgbString());
-        if(theTinyColor.r > redThresh)
+		theTinyColor.toRgb();
+      	if(theTinyColor.getBrightness > redThresh)
         {
         	theTinyColor.spin(180);
+        	console.log("spin!");
         }
         else
         {
