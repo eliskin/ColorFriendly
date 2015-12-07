@@ -4,11 +4,10 @@ var blue = "blueGreenButton";
 var red  = "redBlueButton";
 
 //Initialize port connection with popup script
-var port = chrome.runtime.connect({name: "color_port"});
 console.log("Hello World!"); //Inspect the page's console to view
 
 //Receive and service color change requests
-port.onMessage.addListener(function(msg) {
+chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 	//Get 'blind type' from port message
 	var btype = msg.text;
 	//Confirm Message
