@@ -10,7 +10,7 @@ var contrastR = 25;// red green colorblind value
 var contrastB = 10;//blue green colorblind value
 var contrast = 20;// default value for testing 
 var btype = "UNDEF";
-//var originalColors = ["nothing"];
+//var originalColors;
 //Initialize port connection with popup script
 console.log("Color blind script ready"); //Inspect the page's console to view
 
@@ -20,7 +20,6 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 	btype = msg.text;
 	//Confirm Message
 	console.log("message received: \"" + btype + "\"");
-	saveColors();
 	setColors();
 	
 });
