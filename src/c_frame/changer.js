@@ -10,14 +10,14 @@ var contrastR = 25;// red green colorblind value
 var contrastB = 10;//blue green colorblind value
 var contrast = 20;// default value for testing 
 var btype = "UNDEF";
-
+var originalColors;
 //Initialize port connection with popup script
-console.log("Hello World!"); //Inspect the page's console to view
+console.log("Color blind script ready"); //Inspect the page's console to view
 
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 	//Get 'blind type' from port message
-	var btype = msg.text;
+	btype = msg.text;
 	//Confirm Message
 	console.log("message received: \"" + btype + "\"");
 	setColors();
@@ -44,15 +44,15 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 		var subElements = document.getElementsByTagName("*");//this gets all elements
 		//get the 			
 		//traverse all of the children
+		console.log("Working...");
 		for(var i = 0; i < subElements.length; i++)
 		{		
-			console.log("element");
 			var currentColor;
 			var tinyCurrentColor;		
 			//change background colors		
 			if(subElements[i].style)
 			{
-				console.log("Working...");
+				
 				currentColor = getComputedStyle(subElements[i], null);//get the current color	
 			//	console.log(currentColor.backgroundColor);
 				tinyCurrentColor = tinycolor(currentColor.backgroundColor);
@@ -66,7 +66,8 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 				tinyCurrentColor = tinycolor(currentColor.color);
 				subElements[i].style.color = changeContrast(tinyCurrentColor);
 			}
-		}			
+		}	
+		console.log("Done");		
 	}
 	
 	function changeContrast(theTinyColor)
@@ -81,21 +82,22 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 		*if there is a lot of green then we need to lighten. If there is a lot of both,
 		*then we will spin the colors
 		*/
-        var redThresh = 0;
-        var blueThresh = 0;
+        var redThresh = 127;
+        var blueThresh = 127;
 
         theTinyColor.toRgb();
         //is it not very close to white or black?
 		if(!theTinyColor.isDark() || !theTinyColor.isLight())
 		{
+
+			//tinycolors hex setup: #aarrbbgg 
 			 //set the threshholds and change colors
 	        if (btype == red) 
 			{
-				redThresh = 127;
-				if(theTinyColor.getBrightness() > redThresh)
+				var temp = parseInt(theTinyColor.toHex8String().slice(1,3), 16);//lets try and turn the red hexi value to a number
+				if( temp > redThresh)
 		        {
-		        	theTinyColor.spin(180);
-		        	console.log("spin!");
+		        	theTinyColor.spin(contrast);
 		        }
 		        else
 		        {
@@ -104,11 +106,10 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 			}
 			else if (btype == blue)
 			{
-				blueThresh = 127;
-				if(theTinyColor.getBrightness() > blueThresh)
+				var temp = parseInt(theTinyColor.toHex8String().slice(3,5), 16);//lets try and turn the blue hexi value to a number
+				if(temp > blueThresh)
 		        {
-		        	theTinyColor.spin(180);
-		        	console.log("spin!");
+		        	theTinyColor.spin(contrast);
 		        }
 		        else
 		        {
