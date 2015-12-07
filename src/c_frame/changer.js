@@ -65,7 +65,10 @@ port.onMessage.addListener(function(msg) {
 			//change background colors		
 			if(subElements[i].style)
 			{
-				currentColor = subElements[i].style.backgroundColor;//get the current color
+				console.log("Working...");
+				currentColor = getComputedStyle(subElements[i], null);//get the current color
+				
+				console.log(currentColor.backgroundColor);
 				tinyCurrentColor = tinycolor(currentColor);
 				subElements[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
 			}
@@ -73,6 +76,11 @@ port.onMessage.addListener(function(msg) {
 			if(subElements[i].style)
 			{
 				currentColor = subElements[i].style.color;
+				// if(currentColor)
+				// {
+				// 	console.log("SOMETHING HERE");
+				// }
+				// console.log(currentColor);
 				tinyCurrentColor = tinycolor(currentColor);
 				subElements[i].style.color = changeContrast(tinyCurrentColor);
 			}
@@ -104,8 +112,45 @@ port.onMessage.addListener(function(msg) {
 	
 	function changeContrast(theTinyColor)
 	{
+		/*
+		*So we need to first not change the contrast if an elements light value is already
+		*too high or too low. 
+		*
+		*Second we need to ensure that either blue green or red green dont turn out to be the
+		*same color. So to do this we need to check the red value, and if its below
+		*a certian threshhold then we, IE if there is a lot of red, then we need to darken,
+		*if there is a lot of green then we need to lighten. If there is a lot of both,
+		*then we will spin the colors
+		*/
         // var theColor = tinycolor({ r: re, g: ge, b: be });//set up the color
+        var redThresh = 127;
+        var greenThresh = 127; //this will stay the same 
+        var blueThresh = 127;
+        //set the threshholds
+        if (btype == red) 
+		{
+			redThresh = 127;
+		}
+		else if (btype == blue)
+		{
+			blueThresh = 127;
+		}
+		//is this too bright or dark? 
+		// if()
+		// {
+
+		// }
+
         theTinyColor.toRgb();
-       	theTinyColor.lighten(contrast);//now lets lighten the color based on the contrast
+      //  console.log(theTinyColor.toRgbString());
+        if(theTinyColor.r > redThresh)
+        {
+        	theTinyColor.spin(180);
+        }
+        else
+        {
+        	theTinyColor.darken(contrast);
+        }
+      // 	theTinyColor.lighten(contrast);//now lets lighten the color based on the contrast
        	return theTinyColor.toRgbString(); //now lets return the color 
 	}
