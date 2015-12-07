@@ -14,6 +14,7 @@ console.log("Hello World!"); //Inspect the page's console to view
 port.onMessage.addListener(function(msg) {
 
 	//lets check and see are we getting the color type or an array of objects
+	console.log("Got a message");
 	if(msg.text == red || msg.text == blue)
 	{
 		btype = msg.text;
@@ -33,7 +34,7 @@ port.onMessage.addListener(function(msg) {
 	function setColors()
 	{
 		//This is a test to show how to compare the btype and change an element
-		var 2darray = msg.text;
+		var d2array = msg.text;
 		if (btype == red) 
 		{
 			console.log("Setting for red...")
@@ -61,16 +62,16 @@ port.onMessage.addListener(function(msg) {
 		*/
 
 		//This will traverse every html object
-		for(int i = 0; i < 2darray; i++)
+		for(var i = 0; i < d2array.length; i++)
 		{
 			//This will traverse the background and the forgeround color of an object
-		//	var oldc = 2darray[i][0].c;
-			2darray[i][0] = changeValue(2darray[i][0].c);
-			2darray[i][1] = changeValue(2darray[i][1].c);
+		//	var oldc = d2array[i][0].c;
+			d2array[i][0] = changeValue(d2array[i][0].c);
+			d2array[i][1] = changeValue(d2array[i][1].c);
 			//This section can be changed to manipulate different color values in differnet ways
 		}
 		//now that we have changed the values lets send it back
-		port.postMessage({text: 2darray});
+		port.postMessage({text: d2array});
 	}
 	/**
 	*This will change the value given by adding contrast to it. If the

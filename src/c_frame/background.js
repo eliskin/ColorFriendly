@@ -1,11 +1,10 @@
 
 var color_port; //'blind type'
-var code_fetchColor = "var a = document.body.style.backgroundColor;";
+// var code_fetchColor = "var a = document.body.style.backgroundColor;";
 //Accept port connection with content script
 chrome.runtime.onConnect.addListener(function(port) {
 	if (port.name != "color_port") return;//Confirm port name
 	color_port = port;
-	
 	/*
 	*if we get a message we will be doing 1 of 2 things:
 	*A: getting the elements colors and sending them back or
@@ -34,16 +33,17 @@ function send(btype) {
 **/
 function bsetColor(toChange)
 {
-	var 2darray = toChange.text;
+	var d2array = toChange.text;
 	//toChange will be a variable that contains the red, blue green and hue values of the new color
 
-	for(int i = 0; i < 2darray.length; i++)
+	for(int i = 0; i < d2array.length; i++)
 	{
+		//simplified
 		chrome.tabs.executeScript(null,
-	 			{code:"document.getElementById(\"" + 2darray[i][0].n + "\").style.backgroundColor='rgb(" + 2darray[i][0].r + 2darray[i][0].g + 2darray[i][0].b +")'"});//we change the color of background element
+	 			{code:"document.getElementById(\"" + d2array[i][0].n + "\").style.backgroundColor='rgb(" + d2array[i][0].r + d2array[i][0].g + d2array[i][0].b +")'"});//we change the color of background element
 
 		chrome.tabs.executeScript(null,
-	 			{code:"document.getElementById(\"" + 2darray[i][1].n + "\").style.backgroundColor='rgb(" + 2darray[i][1].r + 2darray[i][1].g + 2darray[i][1].b +")'"});
+	 			{code:"document.getElementById(\"" + d2array[i][1].n + "\").style.backgroundColor='rgb(" + d2array[i][1].r + d2array[i][1].g + d2array[i][1].b +")'"});
 		
 
 	}
