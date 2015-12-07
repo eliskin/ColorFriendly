@@ -11,8 +11,10 @@ var btype = "UNDEF";
 //Initialize port connection with popup script
 var port = chrome.runtime.connect({name: "color_port"});
 console.log("Hello World!"); //Inspect the page's console to view
-var test = tinycolor("rgb(255, 255, 255)");
-console.log(test.toHexString);
+//document.body.style.backgroundColor = "red";
+var test = new tinycolor({ r: 255, g: 0, b: 0 });
+var test2 = test.toHexString();
+console.log(test2);
 //Receive and service color change requests
 port.onMessage.addListener(function(msg) {
 
@@ -22,13 +24,14 @@ port.onMessage.addListener(function(msg) {
 	{
 		btype = msg.text;
 		console.log("message received: \"" + btype + "\"");
-		
+		var color2 = tinycolor({ r: 255, g: 0, b: 134 });
+		console.log(mytest.toHslString());
 		port.postMessage({text: "give"});
 	}
-	else
-	{
-		setColors();
-	}
+	// else
+	// {
+	// 	setColors();
+	// }
 
 	/**
 	*This will call other functions 
@@ -124,20 +127,20 @@ port.onMessage.addListener(function(msg) {
 // TinyColor v1.3.0
 // https://github.com/bgrins/TinyColor
 // Brian Grinstead, MIT License
-//consult the TINYCOLOR_LICENSE file for more details on licensing 
+//consult the TINYCOLOR_LICENSE file for more details
 
-(function() {
+// (function() {
 
 var trimLeft = /^\s+/,
     trimRight = /\s+$/,
-    tinyCounter = 0,
-    math = Math,
-    mathRound = math.round,
-    mathMin = math.min,
-    mathMax = math.max,
-    mathRandom = math.random;
+    tinyCounter = 0;
+    // Math = Math,
+    // Math.round = Math.round,
+    // Math.min = Math.min,
+    // Math.max = Math.max,
+    // Math.random = Math.random;
 
-function tinycolor (color, opts) {
+function tinycolor(color, opts) {
 
     color = (color) ? color : '';
     opts = opts || { };
@@ -157,7 +160,7 @@ function tinycolor (color, opts) {
     this._g = rgb.g,
     this._b = rgb.b,
     this._a = rgb.a,
-    this._roundA = mathRound(100*this._a) / 100,
+    this._roundA = Math.round(100*this._a) / 100,
     this._format = opts.format || rgb.format;
     this._gradientType = opts.gradientType;
 
@@ -165,9 +168,9 @@ function tinycolor (color, opts) {
     // Potentially lose a little bit of precision here, but will fix issues where
     // .5 gets interpreted as half of the total, instead of half of 1
     // If it was supposed to be 128, this was already taken care of by `inputToRgb`
-    if (this._r < 1) { this._r = mathRound(this._r); }
-    if (this._g < 1) { this._g = mathRound(this._g); }
-    if (this._b < 1) { this._b = mathRound(this._b); }
+    if (this._r < 1) { this._r = Math.round(this._r); }
+    if (this._g < 1) { this._g = Math.round(this._g); }
+    if (this._b < 1) { this._b = Math.round(this._b); }
 
     this._ok = rgb.ok;
     this._tc_id = tinyCounter++;
@@ -212,7 +215,7 @@ tinycolor.prototype = {
     },
     setAlpha: function(value) {
         this._a = boundAlpha(value);
-        this._roundA = mathRound(100*this._a) / 100;
+        this._roundA = Math.round(100*this._a) / 100;
         return this;
     },
     toHsv: function() {
@@ -221,7 +224,7 @@ tinycolor.prototype = {
     },
     toHsvString: function() {
         var hsv = rgbToHsv(this._r, this._g, this._b);
-        var h = mathRound(hsv.h * 360), s = mathRound(hsv.s * 100), v = mathRound(hsv.v * 100);
+        var h = Math.round(hsv.h * 360), s = Math.round(hsv.s * 100), v = Math.round(hsv.v * 100);
         return (this._a == 1) ?
           "hsv("  + h + ", " + s + "%, " + v + "%)" :
           "hsva(" + h + ", " + s + "%, " + v + "%, "+ this._roundA + ")";
@@ -232,7 +235,7 @@ tinycolor.prototype = {
     },
     toHslString: function() {
         var hsl = rgbToHsl(this._r, this._g, this._b);
-        var h = mathRound(hsl.h * 360), s = mathRound(hsl.s * 100), l = mathRound(hsl.l * 100);
+        var h = Math.round(hsl.h * 360), s = Math.round(hsl.s * 100), l = Math.round(hsl.l * 100);
         return (this._a == 1) ?
           "hsl("  + h + ", " + s + "%, " + l + "%)" :
           "hsla(" + h + ", " + s + "%, " + l + "%, "+ this._roundA + ")";
@@ -250,20 +253,20 @@ tinycolor.prototype = {
         return '#' + this.toHex8();
     },
     toRgb: function() {
-        return { r: mathRound(this._r), g: mathRound(this._g), b: mathRound(this._b), a: this._a };
+        return { r: Math.round(this._r), g: Math.round(this._g), b: Math.round(this._b), a: this._a };
     },
     toRgbString: function() {
         return (this._a == 1) ?
-          "rgb("  + mathRound(this._r) + ", " + mathRound(this._g) + ", " + mathRound(this._b) + ")" :
-          "rgba(" + mathRound(this._r) + ", " + mathRound(this._g) + ", " + mathRound(this._b) + ", " + this._roundA + ")";
+          "rgb("  + Math.round(this._r) + ", " + Math.round(this._g) + ", " + Math.round(this._b) + ")" :
+          "rgba(" + Math.round(this._r) + ", " + Math.round(this._g) + ", " + Math.round(this._b) + ", " + this._roundA + ")";
     },
     toPercentageRgb: function() {
-        return { r: mathRound(bound01(this._r, 255) * 100) + "%", g: mathRound(bound01(this._g, 255) * 100) + "%", b: mathRound(bound01(this._b, 255) * 100) + "%", a: this._a };
+        return { r: Math.round(bound01(this._r, 255) * 100) + "%", g: Math.round(bound01(this._g, 255) * 100) + "%", b: Math.round(bound01(this._b, 255) * 100) + "%", a: this._a };
     },
     toPercentageRgbString: function() {
         return (this._a == 1) ?
-          "rgb("  + mathRound(bound01(this._r, 255) * 100) + "%, " + mathRound(bound01(this._g, 255) * 100) + "%, " + mathRound(bound01(this._b, 255) * 100) + "%)" :
-          "rgba(" + mathRound(bound01(this._r, 255) * 100) + "%, " + mathRound(bound01(this._g, 255) * 100) + "%, " + mathRound(bound01(this._b, 255) * 100) + "%, " + this._roundA + ")";
+          "rgb("  + Math.round(bound01(this._r, 255) * 100) + "%, " + Math.round(bound01(this._g, 255) * 100) + "%, " + Math.round(bound01(this._b, 255) * 100) + "%)" :
+          "rgba(" + Math.round(bound01(this._r, 255) * 100) + "%, " + Math.round(bound01(this._g, 255) * 100) + "%, " + Math.round(bound01(this._b, 255) * 100) + "%, " + this._roundA + ")";
     },
     toName: function() {
         if (this._a === 0) {
@@ -466,9 +469,9 @@ function inputToRGB(color) {
     return {
         ok: ok,
         format: color.format || format,
-        r: mathMin(255, mathMax(rgb.r, 0)),
-        g: mathMin(255, mathMax(rgb.g, 0)),
-        b: mathMin(255, mathMax(rgb.b, 0)),
+        r: Math.min(255, Math.max(rgb.r, 0)),
+        g: Math.min(255, Math.max(rgb.g, 0)),
+        b: Math.min(255, Math.max(rgb.b, 0)),
         a: a
     };
 }
@@ -503,7 +506,7 @@ function rgbToHsl(r, g, b) {
     g = bound01(g, 255);
     b = bound01(b, 255);
 
-    var max = mathMax(r, g, b), min = mathMin(r, g, b);
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, l = (max + min) / 2;
 
     if(max == min) {
@@ -568,7 +571,7 @@ function rgbToHsv(r, g, b) {
     g = bound01(g, 255);
     b = bound01(b, 255);
 
-    var max = mathMax(r, g, b), min = mathMin(r, g, b);
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, v = max;
 
     var d = max - min;
@@ -598,7 +601,7 @@ function rgbToHsv(r, g, b) {
     s = bound01(s, 100);
     v = bound01(v, 100);
 
-    var i = math.floor(h),
+    var i = Math.floor(h),
         f = h - i,
         p = v * (1 - s),
         q = v * (1 - f * s),
@@ -618,9 +621,9 @@ function rgbToHsv(r, g, b) {
 function rgbToHex(r, g, b, allow3Char) {
 
     var hex = [
-        pad2(mathRound(r).toString(16)),
-        pad2(mathRound(g).toString(16)),
-        pad2(mathRound(b).toString(16))
+        pad2(Math.round(r).toString(16)),
+        pad2(Math.round(g).toString(16)),
+        pad2(Math.round(b).toString(16))
     ];
 
     // Return a 3 character hex if possible
@@ -639,9 +642,9 @@ function rgbaToHex(r, g, b, a) {
 
     var hex = [
         pad2(convertDecimalToHex(a)),
-        pad2(mathRound(r).toString(16)),
-        pad2(mathRound(g).toString(16)),
-        pad2(mathRound(b).toString(16))
+        pad2(Math.round(r).toString(16)),
+        pad2(Math.round(g).toString(16)),
+        pad2(Math.round(b).toString(16))
     ];
 
     return hex.join("");
@@ -656,9 +659,9 @@ tinycolor.equals = function (color1, color2) {
 
 tinycolor.random = function() {
     return tinycolor.fromRatio({
-        r: mathRandom(),
-        g: mathRandom(),
-        b: mathRandom()
+        r: Math.random(),
+        g: Math.random(),
+        b: Math.random()
     });
 };
 
@@ -699,9 +702,9 @@ function lighten (color, amount) {
 function brighten(color, amount) {
     amount = (amount === 0) ? 0 : (amount || 10);
     var rgb = tinycolor(color).toRgb();
-    rgb.r = mathMax(0, mathMin(255, rgb.r - mathRound(255 * - (amount / 100))));
-    rgb.g = mathMax(0, mathMin(255, rgb.g - mathRound(255 * - (amount / 100))));
-    rgb.b = mathMax(0, mathMin(255, rgb.b - mathRound(255 * - (amount / 100))));
+    rgb.r = Math.max(0, Math.min(255, rgb.r - Math.round(255 * - (amount / 100))));
+    rgb.g = Math.max(0, Math.min(255, rgb.g - Math.round(255 * - (amount / 100))));
+    rgb.b = Math.max(0, Math.min(255, rgb.b - Math.round(255 * - (amount / 100))));
     return tinycolor(rgb);
 }
 
@@ -1101,7 +1104,7 @@ function bound01(n, max) {
     if (isOnePointZero(n)) { n = "100%"; }
 
     var processPercent = isPercentage(n);
-    n = mathMin(max, mathMax(0, parseFloat(n)));
+    n = Math.min(max, Math.max(0, parseFloat(n)));
 
     // Automatically convert percentage into number
     if (processPercent) {
@@ -1109,7 +1112,7 @@ function bound01(n, max) {
     }
 
     // Handle floating point rounding errors
-    if ((math.abs(n - max) < 0.000001)) {
+    if ((Math.abs(n - max) < 0.000001)) {
         return 1;
     }
 
@@ -1119,7 +1122,7 @@ function bound01(n, max) {
 
 // Force a number between 0 and 1
 function clamp01(val) {
-    return mathMin(1, mathMax(0, val));
+    return Math.min(1, Math.max(0, val));
 }
 
 // Parse a base-16 hex value into a base-10 integer
@@ -1274,17 +1277,17 @@ function validateWCAG2Parms(parms) {
     return {"level":level, "size":size};
 }
 
-// Node: Export function
-if (typeof module !== "undefined" && module.exports) {
-    module.exports = tinycolor;
-}
-// AMD/requirejs: Define the module
-else if (typeof define === 'function' && define.amd) {
-    define(function () {return tinycolor;});
-}
-// Browser: Expose to window
-else {
-    window.tinycolor = tinycolor;
-}
+// // Node: Export function
+// if (typeof module !== "undefined" && module.exports) {
+//     module.exports = tinycolor;
+// }
+// // AMD/requirejs: Define the module
+// else if (typeof define === 'function' && define.amd) {
+//     define(function () {return tinycolor;});
+// }
+// // Browser: Expose to window
+// else {
+//     window.tinycolor = tinycolor;
+// }
 
-})();
+// })();

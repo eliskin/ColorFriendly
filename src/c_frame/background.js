@@ -14,11 +14,11 @@ chrome.runtime.onConnect.addListener(function(port) {
 	color_port.onMessage.addListener(function(msg) {
 		if(msg.text == "get")
 		{
-			getColor();//lets run the get color function
+			// getColor();//lets run the get color function
 		}
 		else//if its not get then it must be an array
 		{
-			bsetColor(msg.text);
+			// bsetColor(msg.text);
 		}
 	});
 });
@@ -34,20 +34,7 @@ function send(btype) {
 **/
 function bsetColor(toChange)
 {
-	var d2array = toChange.text;
-	//toChange will be a variable that contains the red, blue green and hue values of the new color
 
-	for(int i = 0; i < d2array.length; i++)
-	{
-		//simplified
-		chrome.tabs.executeScript(null,
-	 			{code:"document.getElementById(\"" + d2array[i][0].n + "\").style.backgroundColor='rgb(" + d2array[i][0].r + d2array[i][0].g + d2array[i][0].b +")'"});//we change the color of background element
-
-		chrome.tabs.executeScript(null,
-	 			{code:"document.getElementById(\"" + d2array[i][1].n + "\").style.backgroundColor='rgb(" + d2array[i][1].r + d2array[i][1].g + d2array[i][1].b +")'"});
-		
-
-	}
 	// chrome.tabs.executeScript(null,
 	// 			{code:"document.body.style.backgroundColor='" +  +"'"});//we change the color of background element
 //	getColor();
