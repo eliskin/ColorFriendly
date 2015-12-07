@@ -1,32 +1,26 @@
 
-var color_port; //'blind type'
-// var code_fetchColor = "var a = document.body.style.backgroundColor;";
-//Accept port connection with content script
-chrome.runtime.onConnect.addListener(function(port) {
-	if (port.name != "color_port") return;//Confirm port name
-	color_port = port;
+var kBTypeKey = "kBTypeKey";		
+var kFadeOnOff = "kFadeOnOff";
 
-	/*
-	*if we get a message we will be doing 1 of 2 things:
-	*A: getting the elements colors and sending them back or
-	*B: setting the colors of elememnts
-	*/
-	color_port.onMessage.addListener(function(msg) {
-		if(msg.text == "get")
-		{
-			// getColor();//lets run the get color function
-		}
-		else//if its not get then it must be an array
-		{
-			// bsetColor(msg.text);
-		}
-	});
-});
-
-//Forward color choice to changer.js
-function send(btype) {
-	color_port.postMessage({text: btype});
-	//color_port.postMessage({text: a});
+//forward color choice to all tabs
+function send(msg) {
+    chrome.tabs.query({status: "complete"}, function(tabs) {
+        var i;
+        for(i=0; i < tabs.length; i++) {
+            chrome.tabs.sendMessage(tabs[i].id, {text: msg});
+        }
+		});
 }
 
 
+chrome.tabs.onUpdated.addListener(function(changeinfo) {
+    if (changeinfo.status == "complete") {
+        //load previous settings
+        chrome.storage.sync.get(kBTypeKey, function(result) {
+            send(result.kBTypeKey);
+        });
+        chrome.storage.sync.get(kFadeOnOff, function(result) {
+            send(result.kFadeOnOff);
+        });
+    }
+});

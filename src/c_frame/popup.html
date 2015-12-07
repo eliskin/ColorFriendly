@@ -9,7 +9,7 @@
                 padding:0px 20px 15px 20px;
                 background:white;
             }
-            div.button {
+            div.activatedButton {
                 cursor:pointer;
                 text-align:center;
                 padding:1px 3px;
@@ -22,11 +22,26 @@
                 line-height:20px;
                 border:1px solid white;
                 color:black;
+                transition:all 0.2s ease 0s;
+            }
+            div.deactivatedButton {
+                text-align:center;
+                padding:1px 3px;
+                font-family:sans-serif;
+                font-size:0.8em;
+                width:120px;
+                height:20px;
+                margin-top:1px;
+                background:#cccccc;
+                line-height:20px;
+                border:1px solid white;
+                color:black;
+                transition:all 0.2s ease 0s;
             }
             div.smallBreak {
                 height:5px;
             }
-            div.button:hover {
+            div.activatedButton:hover {
                 border:1px solid black;
             }
             input {
@@ -40,11 +55,11 @@
         <div align="center">Please select an option below to make webpages easier to read.</div>
         <br>
         <span id="s" align="center">
-            <div class="button" id="redBlueButton">Red-Blue Adjustment</div>
+            <div class="activatedButton" id="redBlueButton">Red-Blue Adjustment</div>
             <div class="smallBreak" id="break"></div>
-            <div class="button" id="blueGreenButton">Blue-Green Adjustment</div>
+            <div class="activatedButton" id="blueGreenButton">Blue-Green Adjustment</div>
             <br>
         </span>
-        <input type="checkbox" id="FadeToggler" name="FadeEnabled" value="FadeEnabled" checked>Fade Enabled
+        <input type="checkbox" id="AdjustmentToggler" name="EnableAdjustment" value="EnableAdjustment" checked>Enable Adjustment
     </body>
 </html>
