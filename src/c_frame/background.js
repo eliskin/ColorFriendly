@@ -1,23 +1,26 @@
 
-var color_port; //'blind type'
+var kBTypeKey = "kBTypeKey";		
+var kFadeOnOff = "kFadeOnOff";
 
-//Accept port connection with content script
-chrome.runtime.onConnect.addListener(function(port) {
-    if (port.name != "color_port") return;//Confirm port name
-    color_port = port;
-
-    var kBTypeKey = "kBTypeKey";
-    var kFadeOnOff = "kFadeOnOff";
-
-    chrome.storage.sync.get(kBTypeKey, function(result) {
-        send(result.kBTypeKey);
-    });
-    chrome.storage.sync.get(kFadeOnOff, function(result) {
-        send(result.kFadeOnOff);
-    });
-});
-
-//Forward color choice to changer.js
-function send(btype) {
-	  color_port.postMessage({text: btype});
+//forward color choice to all tabs
+function send(msg) {
+    chrome.tabs.query({status: "complete"}, function(tabs) {
+        var i;
+        for(i=0; i < tabs.length; i++) {
+            chrome.tabs.sendMessage(tabs[i].id, {text: msg});
+        }
+		});
 }
+
+
+chrome.tabs.onUpdated.addListener(function(changeinfo) {
+    if (changeinfo.status == "complete") {
+        //load previous settings
+        chrome.storage.sync.get(kBTypeKey, function(result) {
+            send(result.kBTypeKey);
+        });
+        chrome.storage.sync.get(kFadeOnOff, function(result) {
+            send(result.kFadeOnOff);
+        });
+    }
+});
