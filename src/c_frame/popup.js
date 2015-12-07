@@ -4,7 +4,6 @@ var choice = "default";
 var adjustmentEnabled = true;
 
 var kBTypeKey = "kBTypeKey";
-var kFadeOnOff = "kFadeOnOff";
 var kAdjustmentOnOff = "kAdjustmentOnOff";
 
 var kDefaultButtonBGColor = "#cccccc";
@@ -15,9 +14,6 @@ var kSelectedButtonBGColor = "#aaaaaa";
 document.addEventListener('DOMContentLoaded', function () {
     var span = document.getElementById("s")
   	span.addEventListener('click', click);
-	
-    var fadeCheckbox = document.getElementById("FadeToggler");
-    fadeCheckbox.addEventListener('change', fadeCheckboxDidChange);
 
     var adjustmentCheckbox = document.getElementById("AdjustmentToggler");
     adjustmentCheckbox.addEventListener('change', adjustmentCheckboxDidChange);
@@ -32,16 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
   	        choice = document.getElementById(result.kBTypeKey);
   	        choice.style.background = kSelectedButtonBGColor;
   	    }
-    });
-	
-  	chrome.storage.sync.get(kFadeOnOff, function(result) {
-        if (chrome.runtime.lastError)
-            console.warn(chrome.runtime.lastError.message);
-        // the first time this runs, undefined is returned,
-        // and we don't need another if for that case because
-        // the default value of the checkbox will just be true
-        else if (typeof result.kFadeOnOff !== "undefined")		
-            fadeCheckbox.checked = result.kFadeOnOff;
     });
 
     chrome.storage.sync.get(kAdjustmentOnOff, function(result) {
@@ -77,20 +63,6 @@ function click(e) {
         });
     }
     //window.close();//close the window
-}
-
-function fadeCheckboxDidChange(e) {
-    // the value of checkbox.checked is the value of the new state
-    // of the checkbox (so if the user is unchecking the box,
-    // checkbox.checked returns false)
-    var checked = e.target.checked;
-    // [TODO] Should there be a different function for this send and for
-    // the send of the other checkbox?
-    bgpage.send(checked);
-    chrome.storage.sync.set({kFadeOnOff: checked}, function(result) {
-        if (chrome.runtime.lastError)
-            console.warn(chrome.runtime.lastError.message);
-    });
 }
 
 function adjustmentCheckboxDidChange(e) {
