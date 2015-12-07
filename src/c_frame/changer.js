@@ -8,7 +8,7 @@ var red  = "redBlueButton";
 //RED AND BLUE HUE/COLOR MODIFIERS
 var contrastR = 25;// red green colorblind value
 var contrastB = -10;//blue green colorblind value
-var contrast = 100;// default value for testing 
+var contrast = 20;// default value for testing 
 var btype = "UNDEF";
 
 //Initialize port connection with popup script
@@ -54,18 +54,47 @@ port.onMessage.addListener(function(msg) {
 		}
 		
 		//now lets traverse all of the elements and check their background and forground colors
-		var subElements = document.body.children;
+		var subElements = document.body.childNodes;
 		for(var i = 0; i < subElements.length; i++)
 		{
 			console.log("element");
+			var currentColor;
+			var tinyCurrentColor;
 			//change background colors
-			var currentColor = subElements[i].style.backgroundColor;//get the current color
-			var tinyCurrentColor = tinycolor(currentColor);
-			subElements[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
-			//change text colors
-			currentColor = subElements[i].style.color;
-			tinyCurrentColor = tinycolor(currentColor);
-			subElements[i].style.color = changeContrast(tinyCurrentColor);
+			if(subElements[i].style)
+			{
+				currentColor = subElements[i].style.backgroundColor;//get the current color
+				tinyCurrentColor = tinycolor(currentColor);
+				subElements[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
+			}
+			// change text colors
+			if(subElements[i].style)
+			{
+				currentColor = subElements[i].style.color;
+				tinyCurrentColor = tinycolor(currentColor);
+				subElements[i].style.color = changeContrast(tinyCurrentColor);
+			}
+		}
+		var subElementsT = document.title.childNodes;
+		for(var i = 0; i < subElementsT.length; i++)
+		{
+			console.log("element");
+			var currentColor;
+			var tinyCurrentColor;
+			//change background colors
+			if(subElementsT[i].style)
+			{
+				currentColor = subElementsT[i].style.backgroundColor;//get the current color
+				tinyCurrentColor = tinycolor(currentColor);
+				subElementsT[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
+			}
+			// change text colors
+			if(subElementsT[i].style)
+			{
+				currentColor = subElementsT[i].style.color;
+				tinyCurrentColor = tinycolor(currentColor);
+				subElementsT[i].style.color = changeContrast(tinyCurrentColor);
+			}
 		}
 	}
 	/**
