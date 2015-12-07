@@ -81,29 +81,6 @@ port.onMessage.addListener(function(msg) {
 			}
 		}			
 	}
-	/**
-	*This will change the value given by adding contrast to it. If the
-	*new value is too low or too high we will wrap the number around.
-	*This is very simple, as it is currently for testing purposes. 
-	*/
-	function changeValue(value)
-	{
-		var lowest = 0; //the lowest we can go
-		var highest = 100;//the highest we can go
-
-		//may change this to multiplication or something
-		var newValue = value + contrast;
-
-		if(newValue > highest)//if too high
-		{
-			newValue = newValue - highest;
-		}
-		else if(newValue < lowest) // if too low
-		{
-			newValue = newValue + highest;
-		}
-		return newValue;
-	}
 	
 	function changeContrast(theTinyColor)
 	{
