@@ -34,9 +34,21 @@ function send(btype) {
 **/
 function bsetColor(toChange)
 {
+	var 2darray = toChange.text;
 	//toChange will be a variable that contains the red, blue green and hue values of the new color
-	chrome.tabs.executeScript(null,
-				{code:"document.body.style.backgroundColor='" + toChange.text +"'"});//we change the color of background element
+
+	for(int i = 0; i < 2darray.length; i++)
+	{
+		chrome.tabs.executeScript(null,
+	 			{code:"document.getElementById(\"" + 2darray[i][0].n + "\").style.backgroundColor='rgb(" + 2darray[i][0].r + 2darray[i][0].g + 2darray[i][0].b +")'"});//we change the color of background element
+
+		chrome.tabs.executeScript(null,
+	 			{code:"document.getElementById(\"" + 2darray[i][1].n + "\").style.backgroundColor='rgb(" + 2darray[i][1].r + 2darray[i][1].g + 2darray[i][1].b +")'"});
+		
+
+	}
+	// chrome.tabs.executeScript(null,
+	// 			{code:"document.body.style.backgroundColor='" +  +"'"});//we change the color of background element
 //	getColor();
 }
 

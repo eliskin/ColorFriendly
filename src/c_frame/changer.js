@@ -3,8 +3,8 @@
 var blue = "blue";
 var red  = "red";
 //RED AND BLUE HUE/COLOR MODIFIERS
-var contrastR = 1;// red green colorblind value
-var contrastB = 1;//blue green colorblind value
+var contrastR = 100;// red green colorblind value
+var contrastB = -45;//blue green colorblind value
 var contrast;
 var btype = "UNDEF";
 //Initialize port connection with popup script
@@ -48,7 +48,7 @@ port.onMessage.addListener(function(msg) {
 		/*
 		*How the color objects are set up:
 		*object{
-		*	name 
+		*	n 
 		*	r
 		*	g
 		*	b
@@ -63,14 +63,19 @@ port.onMessage.addListener(function(msg) {
 		//This will traverse every html object
 		for(int i = 0; i < 2darray; i++)
 		{
-			//This will traverse the background and the forground color of an object
-			var oldc = 2darray[i][0].c;
-
+			//This will traverse the background and the forgeround color of an object
+		//	var oldc = 2darray[i][0].c;
+			2darray[i][0] = changeValue(2darray[i][0].c);
+			2darray[i][1] = changeValue(2darray[i][1].c);
+			//This section can be changed to manipulate different color values in differnet ways
 		}
+		//now that we have changed the values lets send it back
+		port.postMessage({text: 2darray});
 	}
 	/**
 	*This will change the value given by adding contrast to it. If the
-	*new value is too low or too high we will wrap the number around
+	*new value is too low or too high we will wrap the number around.
+	*This is very simple, as it is currently for testing purposes. 
 	*/
 	function changeValue(value)
 	{
