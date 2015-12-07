@@ -117,34 +117,43 @@ port.onMessage.addListener(function(msg) {
 		*if there is a lot of green then we need to lighten. If there is a lot of both,
 		*then we will spin the colors
 		*/
-        // var theColor = tinycolor({ r: re, g: ge, b: be });//set up the color
-        var redThresh = 127;
-        var greenThresh = 127; //this will stay the same 
-        var blueThresh = 127;
-        //set the threshholds
-        if (btype == red) 
-		{
-			redThresh = 127;
-		}
-		else if (btype == blue)
-		{
-			blueThresh = 127;
-		}
-		//is this too bright or dark? 
-		// if()
-		// {
+        var redThresh = 0;
+        var blueThresh = 0;
 
-		// }
-		theTinyColor.toRgb();
-      	if(theTinyColor.getBrightness > redThresh)
-        {
-        	theTinyColor.spin(180);
-        	console.log("spin!");
-        }
-        else
-        {
-        	theTinyColor.darken(contrast);
-        }
-      // 	theTinyColor.lighten(contrast);//now lets lighten the color based on the contrast
+        theTinyColor.toRgb();
+        //is it not very close to white or black?
+		if(!theTinyColor.isDark() || !theTinyColor.isLight())
+		{
+			 //set the threshholds and change colors
+	        if (btype == red) 
+			{
+				redThresh = 127;
+				if(theTinyColor.getBrightness() > redThresh)
+		        {
+		        	theTinyColor.spin(180);
+		        	console.log("spin!");
+		        }
+		        else
+		        {
+		        	theTinyColor.darken(contrast);
+		        }
+			}
+			else if (btype == blue)
+			{
+				blueThresh = 127;
+				if(theTinyColor.getBrightness() > blueThresh)
+		        {
+		        	theTinyColor.spin(180);
+		        	console.log("spin!");
+		        }
+		        else
+		        {
+		        	theTinyColor.darken(contrast);
+		        }
+			}
+		}
+
+       
+
        	return theTinyColor.toRgbString(); //now lets return the color 
 	}
