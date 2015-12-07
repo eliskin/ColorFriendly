@@ -5,6 +5,7 @@ var color_port; //'blind type'
 chrome.runtime.onConnect.addListener(function(port) {
 	if (port.name != "color_port") return;//Confirm port name
 	color_port = port;
+
 	/*
 	*if we get a message we will be doing 1 of 2 things:
 	*A: getting the elements colors and sending them back or
@@ -59,9 +60,9 @@ function bsetColor(toChange)
 function getColor()
 {
 	// chrome.tabs.executeScript(null,
-	// 			{code:"var a = document.body.style.backgroundColor"});
-	var a = document.getElementById("A");
-	var b = a.style.backgroundColor;
-	send(b);
+	// // 			{code:"var a = document.body.style.backgroundColor"});
+	// var a = document.getElementById("A");
+	// var b = a.style.backgroundColor;
+	// send(b);
 }
 
