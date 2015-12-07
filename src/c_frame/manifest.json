@@ -1,12 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "Color Friendly",
-  "description": "Change the color of page elements",
+  "name": "ColorFriendly",
+  "description": "Change the color of webpage elements to make it easier to view for color blind people",
   "version": "1.0",
   "permissions": [
     "tabs",
-    "http://*/*",
-    "https://*/*",
     "storage"
   ],
   "browser_action": {
