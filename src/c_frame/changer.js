@@ -1,12 +1,13 @@
 
 //Color Type Constants
-var blue = "blue";
-var red  = "red";
+var blue = "blueGreenButton";
+var red  = "redBlueButton";
 //RED AND BLUE HUE/COLOR MODIFIERS
 var contrastR = 100;// red green colorblind value
 var contrastB = -45;//blue green colorblind value
 var contrast;
 var btype = "UNDEF";
+
 //Initialize port connection with popup script
 var port = chrome.runtime.connect({name: "color_port"});
 console.log("Hello World!"); //Inspect the page's console to view
