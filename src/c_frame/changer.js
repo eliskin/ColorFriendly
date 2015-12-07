@@ -7,7 +7,7 @@ var blue = "blueGreenButton";
 var red  = "redBlueButton";
 //RED AND BLUE HUE/COLOR MODIFIERS
 var contrastR = 25;// red green colorblind value
-var contrastB = -10;//blue green colorblind value
+var contrastB = 10;//blue green colorblind value
 var contrast = 20;// default value for testing 
 var btype = "UNDEF";
 
@@ -55,6 +55,7 @@ port.onMessage.addListener(function(msg) {
 		
 		//now lets traverse all of the elements and check their background and forground colors
 		var subElements = document.body.childNodes;
+		//get the 
 		for(var i = 0; i < subElements.length; i++)
 		{
 			console.log("element");
@@ -75,27 +76,27 @@ port.onMessage.addListener(function(msg) {
 				subElements[i].style.color = changeContrast(tinyCurrentColor);
 			}
 		}
-		var subElementsT = document.title.childNodes;
-		for(var i = 0; i < subElementsT.length; i++)
-		{
-			console.log("element");
-			var currentColor;
-			var tinyCurrentColor;
-			//change background colors
-			if(subElementsT[i].style)
-			{
-				currentColor = subElementsT[i].style.backgroundColor;//get the current color
-				tinyCurrentColor = tinycolor(currentColor);
-				subElementsT[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
-			}
-			// change text colors
-			if(subElementsT[i].style)
-			{
-				currentColor = subElementsT[i].style.color;
-				tinyCurrentColor = tinycolor(currentColor);
-				subElementsT[i].style.color = changeContrast(tinyCurrentColor);
-			}
-		}
+		// var subElementsT = document.title.childNodes;
+		// for(var i = 0; i < subElementsT.length; i++)
+		// {
+		// 	console.log("element");
+		// 	var currentColor;
+		// 	var tinyCurrentColor;
+		// 	//change background colors
+		// 	if(subElementsT[i].style)
+		// 	{
+		// 		currentColor = subElementsT[i].style.backgroundColor;//get the current color
+		// 		tinyCurrentColor = tinycolor(currentColor);
+		// 		subElementsT[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
+		// 	}
+		// 	// change text colors
+		// 	if(subElementsT[i].style)
+		// 	{
+		// 		currentColor = subElementsT[i].style.color;
+		// 		tinyCurrentColor = tinycolor(currentColor);
+		// 		subElementsT[i].style.color = changeContrast(tinyCurrentColor);
+		// 	}
+		// }
 	}
 	/**
 	*This will change the value given by adding contrast to it. If the
@@ -124,8 +125,8 @@ port.onMessage.addListener(function(msg) {
 	function changeContrast(theTinyColor)
 	{
         // var theColor = tinycolor({ r: re, g: ge, b: be });//set up the color
-        theTinyColor.toHsl();
-       	theTinyColor.darken(contrast);//now lets lighten the color based on the contrast
+        theTinyColor.toRgb();
+       	theTinyColor.lighten(contrast);//now lets lighten the color based on the contrast
        	return theTinyColor.toRgbString(); //now lets return the color 
 	}
 
