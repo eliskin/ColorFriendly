@@ -54,49 +54,29 @@ port.onMessage.addListener(function(msg) {
 		}
 		
 		//now lets traverse all of the elements and check their background and forground colors
-		var subElements = document.body.childNodes;
-		//get the 
+		var subElements = document.getElementsByTagName("*");//this gets all elements
+		//get the 			
+		//traverse all of the children
 		for(var i = 0; i < subElements.length; i++)
-		{
+		{		
 			console.log("element");
 			var currentColor;
-			var tinyCurrentColor;
-			//change background colors
+			var tinyCurrentColor;		
+			//change background colors		
 			if(subElements[i].style)
 			{
 				currentColor = subElements[i].style.backgroundColor;//get the current color
 				tinyCurrentColor = tinycolor(currentColor);
 				subElements[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
 			}
-			// change text colors
+			// change text colors		
 			if(subElements[i].style)
 			{
 				currentColor = subElements[i].style.color;
 				tinyCurrentColor = tinycolor(currentColor);
 				subElements[i].style.color = changeContrast(tinyCurrentColor);
 			}
-		}
-		// var subElementsT = document.title.childNodes;
-		// for(var i = 0; i < subElementsT.length; i++)
-		// {
-		// 	console.log("element");
-		// 	var currentColor;
-		// 	var tinyCurrentColor;
-		// 	//change background colors
-		// 	if(subElementsT[i].style)
-		// 	{
-		// 		currentColor = subElementsT[i].style.backgroundColor;//get the current color
-		// 		tinyCurrentColor = tinycolor(currentColor);
-		// 		subElementsT[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
-		// 	}
-		// 	// change text colors
-		// 	if(subElementsT[i].style)
-		// 	{
-		// 		currentColor = subElementsT[i].style.color;
-		// 		tinyCurrentColor = tinycolor(currentColor);
-		// 		subElementsT[i].style.color = changeContrast(tinyCurrentColor);
-		// 	}
-		// }
+		}			
 	}
 	/**
 	*This will change the value given by adding contrast to it. If the
@@ -129,5 +109,3 @@ port.onMessage.addListener(function(msg) {
        	theTinyColor.lighten(contrast);//now lets lighten the color based on the contrast
        	return theTinyColor.toRgbString(); //now lets return the color 
 	}
-
-
