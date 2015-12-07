@@ -10,7 +10,7 @@ var contrastR = 25;// red green colorblind value
 var contrastB = 10;//blue green colorblind value
 var contrast = 20;// default value for testing 
 var btype = "UNDEF";
-var originalColors;
+//var originalColors = ["nothing"];
 //Initialize port connection with popup script
 console.log("Color blind script ready"); //Inspect the page's console to view
 
@@ -20,6 +20,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 	btype = msg.text;
 	//Confirm Message
 	console.log("message received: \"" + btype + "\"");
+	saveColors();
 	setColors();
 	
 });
@@ -41,8 +42,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 		}
 		
 		//now lets traverse all of the elements and check their background and forground colors
-		var subElements = document.getElementsByTagName("*");//this gets all elements
-		//get the 			
+		var subElements = document.getElementsByTagName("*");//this gets all elements			
 		//traverse all of the children
 		console.log("Working...");
 		for(var i = 0; i < subElements.length; i++)
@@ -53,13 +53,11 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 			if(subElements[i].style)
 			{
 				
-				currentColor = getComputedStyle(subElements[i], null);//get the current color	
-			//	console.log(currentColor.backgroundColor);
-				tinyCurrentColor = tinycolor(currentColor.backgroundColor);
-			//	console.log(tinyCurrentColor.toRgbString());
+				currentColor = getComputedStyle(subElements[i], null);//get the current cumpoted style based on css and html
+				tinyCurrentColor = tinycolor(currentColor.backgroundColor);//get just the color
 				subElements[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
 			}
-			// change text colors		
+			// change forground colors		
 			if(subElements[i].style)
 			{
 				currentColor =  getComputedStyle(subElements[i], null);
@@ -72,19 +70,10 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 	
 	function changeContrast(theTinyColor)
 	{
-		/*
-		*So we need to first not change the contrast if an elements light value is already
-		*too high or too low. 
-		*
-		*Second we need to ensure that either blue green or red green dont turn out to be the
-		*same color. So to do this we need to check the red value, and if its below
-		*a certian threshhold then we, IE if there is a lot of red, then we need to darken,
-		*if there is a lot of green then we need to lighten. If there is a lot of both,
-		*then we will spin the colors
-		*/
+		//set these thresh hold values
         var redThresh = 127;
         var blueThresh = 127;
-
+        //change it ro rgb
         theTinyColor.toRgb();
         //is it not very close to white or black?
 		if(!theTinyColor.isDark() || !theTinyColor.isLight())
@@ -97,11 +86,11 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 				var temp = parseInt(theTinyColor.toHex8String().slice(1,3), 16);//lets try and turn the red hexi value to a number
 				if( temp > redThresh)
 		        {
-		        	theTinyColor.spin(contrast);
+		        	theTinyColor.spin(contrast);//if its too much, we will spin the colors
 		        }
 		        else
 		        {
-		        	theTinyColor.darken(contrast);
+		        	theTinyColor.darken(contrast);//if its below we can darken
 		        }
 			}
 			else if (btype == blue)
@@ -117,8 +106,5 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
 		        }
 			}
 		}
-
-       
-
        	return theTinyColor.toRgbString(); //now lets return the color 
 	}
