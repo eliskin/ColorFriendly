@@ -8,7 +8,7 @@ var red  = "redBlueButton";
 //RED AND BLUE HUE/COLOR MODIFIERS
 var contrastR = 25;// red green colorblind value
 var contrastB = -10;//blue green colorblind value
-var contrast = 56;// default value for testing 
+var contrast = 100;// default value for testing 
 var btype = "UNDEF";
 
 //Initialize port connection with popup script
@@ -57,8 +57,15 @@ port.onMessage.addListener(function(msg) {
 		var subElements = document.body.children;
 		for(var i = 0; i < subElements.length; i++)
 		{
-			var currentColor = subElements[i].style.color;//get the current color
-			subElements[i].style.color = changeValue(currentColor);//lets change it!
+			console.log("element");
+			//change background colors
+			var currentColor = subElements[i].style.backgroundColor;//get the current color
+			var tinyCurrentColor = tinycolor(currentColor);
+			subElements[i].style.backgroundColor = changeContrast(tinyCurrentColor);//lets change it!
+			//change text colors
+			currentColor = subElements[i].style.color;
+			tinyCurrentColor = tinycolor(currentColor);
+			subElements[i].style.color = changeContrast(tinyCurrentColor);
 		}
 	}
 	/**
@@ -85,11 +92,12 @@ port.onMessage.addListener(function(msg) {
 		return newValue;
 	}
 	
-	function changeContrast(re, ge, be, value)
+	function changeContrast(theTinyColor)
 	{
-        var theColor = tineyColor({ r: re, g: ge, b: be });//set up the color
-       	theColor.lighten(changeValue(value));//now lets lighten the color based on the contrast
-       	return theColor; //now lets return the color 
+        // var theColor = tinycolor({ r: re, g: ge, b: be });//set up the color
+        theTinyColor.toHsl();
+       	theTinyColor.darken(contrast);//now lets lighten the color based on the contrast
+       	return theTinyColor.toRgbString(); //now lets return the color 
 	}
 
 
