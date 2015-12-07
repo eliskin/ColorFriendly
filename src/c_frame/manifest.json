@@ -19,6 +19,6 @@
 	},
 	"content_scripts": [{
 			"matches": ["http://*/*","https://*/*"],
-			"js": ["changer.js"]
+			"js": ["tinycolor.js", "changer.js"]
 	}]
 }
