@@ -17,7 +17,6 @@ console.log("Hello World!"); //Inspect the page's console to view
 
 //FOR TESTING 
 setColors();
-console.log("we did it");
 //Receive and service color change requests
 port.onMessage.addListener(function(msg) {
 
@@ -40,16 +39,13 @@ port.onMessage.addListener(function(msg) {
 	*/
 	function setColors()
 	{
-		console.log("Inside of set colors");
 		//This is a test to show how to compare the btype and change an element
 		if (btype == red) 
 		{
-			console.log("Setting for red...")
 			contrast = contrastR;
 		}
 		else if (btype == blue)
 		{
-			console.log("Setting for blue...")
 			contrast = contrastB;
 		}
 		
